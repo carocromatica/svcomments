@@ -9,16 +9,31 @@
   };
   firebase.initializeApp(config);
 
-  var db=firebase.firestore()
+ const db=firebase.firestore()
+  
 
-
-db.collection("datos").add({
-    name: "we",
+function guardar () {
+  let comment=document.getElementById('comentario').value;
+db.collection("cosas").add({
+   dato:comment
   
 })
 .then(function(docRef) {
     console.log("Document successfully written!",docRef.id);
+    document.getElementById('comentario').value='';
 })
 .catch(function(error) {
     console.error("Error writing document: ", error);
+});
+
+}
+
+let post= document.getElementById("post")
+db.collection("cosas").onSnapshot((querySnapshot) => {
+  post.innerHTML='';
+  querySnapshot.forEach(function(doc) {
+    
+      console.log(doc.id, " => ", doc.data());
+      post.innerHTML +=`<p> ${doc.data().dato}</p>`
+  });
 });
