@@ -7,11 +7,11 @@
     storageBucket: "comentarios-be787.appspot.com",
     messagingSenderId: "84563280079"
   };
-  firebase.initializeApp(config);
+  
+firebase.initializeApp(config);
 
  const db=firebase.firestore()
   
-
 function guardar () {
   let comment=document.getElementById('comentario').value;
 db.collection("cosas").add({
@@ -30,10 +30,21 @@ db.collection("cosas").add({
 
 let post= document.getElementById("post")
 db.collection("cosas").onSnapshot((querySnapshot) => {
+  
   post.innerHTML='';
   querySnapshot.forEach(function(doc) {
     
       console.log(doc.id, " => ", doc.data());
-      post.innerHTML +=`<p> ${doc.data().dato}</p>`
+      post.innerHTML +=`<p><button onclick="borrar('${doc.id}')">X</button> ${doc.data().dato} 
+      </p>`
   });
 });
+
+function borrar(id){
+  db.collection("cosas").doc(id).delete()
+  .then(function() {
+    console.log("Document successfully deleted!");
+}).catch(function(error) {
+    console.error("Error removing document: ", error);
+});
+}
